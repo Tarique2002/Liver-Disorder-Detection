@@ -13,8 +13,9 @@ FEATURE_COLS = [
 
 def load_models():
     """Loads the trained Random Forest model and the scaler."""
-    model_path = "models/liver_model.pkl"
-    scaler_path = "models/scaler.pkl"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(base_dir, "models", "liver_model.pkl")
+    scaler_path = os.path.join(base_dir, "models", "scaler.pkl")
     
     if not os.path.exists(model_path) or not os.path.exists(scaler_path):
         return None, None

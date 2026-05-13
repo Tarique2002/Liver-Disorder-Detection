@@ -247,7 +247,9 @@ elif page == "Analytics Dashboard":
     
     # Load dataset for EDA
     try:
-        df = pd.read_csv("dataset/indian_liver_patient.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(base_dir, "dataset", "indian_liver_patient.csv")
+        df = pd.read_csv(csv_path)
         
         st.subheader("Dataset Overview")
         st.write(df.head())

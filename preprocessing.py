@@ -4,8 +4,11 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import os
 
-def load_data(filepath="dataset/indian_liver_patient.csv"):
+def load_data(filepath=None):
     """Loads the dataset."""
+    if filepath is None:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(base_dir, "dataset", "indian_liver_patient.csv")
     df = pd.read_csv(filepath)
     return df
 

@@ -7,7 +7,7 @@ import preprocessing
 
 def train_and_evaluate():
     print("Loading data...")
-    df = preprocessing.load_data("dataset/indian_liver_patient.csv")
+    df = preprocessing.load_data()
     
     print("Preprocessing data...")
     X, y, scaler = preprocessing.clean_and_preprocess(df, is_training=True)
@@ -30,10 +30,12 @@ def train_and_evaluate():
     
     print("Saving model and scaler...")
     # Create models directory if it doesn't exist
-    os.makedirs("models", exist_ok=True)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    models_dir = os.path.join(base_dir, "models")
+    os.makedirs(models_dir, exist_ok=True)
     
-    joblib.dump(rf_model, "models/liver_model.pkl")
-    joblib.dump(scaler, "models/scaler.pkl")
+    joblib.dump(rf_model, os.path.join(models_dir, "liver_model.pkl"))
+    joblib.dump(scaler, os.path.join(models_dir, "scaler.pkl"))
     # Using simple dictionary encoding for gender in prediction.py so we don't strictly need encoder.pkl,
     # but we can save a dummy dict if needed.
     
