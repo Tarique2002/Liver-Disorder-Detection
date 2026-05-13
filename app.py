@@ -12,7 +12,7 @@ from datetime import datetime
 
 # Local imports
 from prediction import load_models, predict_liver_disease, generate_recommendations, FEATURE_COLS
-from chatbot import initialize_chatbot, get_chatbot_response
+from chatbot import get_chatbot_response
 from model_training import train_and_evaluate
 
 # ----------------- PAGE CONFIG -----------------
@@ -68,8 +68,8 @@ if 'patient_data' not in st.session_state:
 st.sidebar.title("🩺 LiverCare AI")
 st.sidebar.markdown("Advanced Liver Disorder Detection")
 
-st.sidebar.subheader("API Configuration")
-api_key = st.sidebar.text_input("Enter Gemini API Key (for Chatbot)", type="password", help="Required for the AI Medical Assistant to work.")
+st.sidebar.subheader("Chatbot Mode")
+st.sidebar.info("Running locally (Rule-Based)")
 
 st.sidebar.subheader("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Prediction", "AI Chatbot", "Analytics Dashboard"])
@@ -219,34 +219,28 @@ elif page == "AI Chatbot":
     st.title("AI Medical Chatbot")
     st.write("Ask our specialized AI assistant about liver health, symptoms, and lifestyle changes.")
     
-    if not api_key:
-        st.warning("⚠️ Please enter your Gemini API Key in the sidebar to use the chatbot.")
-    else:
-        gemini_model = initialize_chatbot(api_key)
+    # Display chat messages from history
+    for message in st.session_state.chat_history:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            
+    # Accept user input
+    if prompt := st.chat_input("Ask a medical question (e.g., 'What are the symptoms of fatty liver?'):"):
+        # Add user message to chat history
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
         
-        if gemini_model:
-            # Display chat messages from history
-            for message in st.session_state.chat_history:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
-                    
-            # Accept user input
-            if prompt := st.chat_input("Ask a medical question (e.g., 'What are the symptoms of fatty liver?'):"):
-                # Add user message to chat history
-                st.session_state.chat_history.append({"role": "user", "content": prompt})
-                
-                # Display user message
-                with st.chat_message("user"):
-                    st.markdown(prompt)
-                    
-                # Get response
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking..."):
-                        response_text = get_chatbot_response(gemini_model, prompt, st.session_state.chat_history)
-                        st.markdown(response_text)
-                
-                # Add assistant response to chat history
-                st.session_state.chat_history.append({"role": "assistant", "content": response_text})
+        # Display user message
+        with st.chat_message("user"):
+            st.markdown(prompt)
+            
+        # Get response
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response_text = get_chatbot_response(prompt, st.session_state.chat_history)
+                st.markdown(response_text)
+        
+        # Add assistant response to chat history
+        st.session_state.chat_history.append({"role": "assistant", "content": response_text})
 
 elif page == "Analytics Dashboard":
     st.title("Explainable AI & Analytics Dashboard")
