@@ -131,23 +131,35 @@ def create_pdf_report(patient_data, result, recommendations):
 # ----------------- PAGES -----------------
 
 if page == "Home":
-    st.title("Welcome to LiverCare AI")
+    st.title("Welcome to LiverCare AI 🩺")
     st.markdown("""
-    <div class="card">
-        <h3>AI-Powered Clinical Decision Support System</h3>
-        <p>This platform combines advanced Machine Learning with Generative AI to provide a comprehensive healthcare tool for liver disease detection and risk prediction.</p>
-        <ul>
-            <li><b>Machine Learning Prediction:</b> Utilizes a highly accurate Random Forest model trained on the Indian Liver Patient Dataset.</li>
-            <li><b>Explainable AI:</b> Understand <i>why</i> the model made a prediction using SHAP visualizations.</li>
-            <li><b>Medical AI Chatbot:</b> A specialized medical assistant powered by Google Gemini to answer your queries.</li>
-            <li><b>Downloadable Reports:</b> Generate comprehensive PDF health reports instantly.</li>
-        </ul>
-        <p><i>Navigate using the sidebar to explore the features.</i></p>
-    </div>
+    <h3 style="color: #6c757d; font-weight: 400;">Advanced Clinical Decision Support System for Hepatic Health</h3>
+    <hr>
     """, unsafe_allow_html=True)
     
-    # Add a nice banner image (optional placeholder)
-    st.image("https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", caption="Empowering Healthcare with AI")
+    col1, col2 = st.columns([1.5, 1])
+    with col1:
+        st.markdown("""
+        <div class="card" style="padding: 2rem;">
+            <h4 style="color: #0d6efd; margin-top: 0;">Empowering Early Detection</h4>
+            <p style="font-size: 1.1rem; line-height: 1.6;">
+            LiverCare AI is a state-of-the-art diagnostic assistant designed to bridge the gap between artificial intelligence and clinical hepatology. 
+            By analyzing complex biochemical markers, our platform provides instant, highly accurate risk assessments for liver disorders.
+            </p>
+            <hr>
+            <h5>Core Capabilities:</h5>
+            <ul style="font-size: 1.05rem; line-height: 1.8;">
+                <li>🔬 <b>Predictive Analytics:</b> High-accuracy risk stratification using Random Forest algorithms.</li>
+                <li>🧠 <b>Explainable AI (SHAP):</b> Transparent decision-making visualizing clinical feature importance.</li>
+                <li>💬 <b>Virtual AI Assistant:</b> Rule-based conversational agent for instant clinical guidance.</li>
+                <li>📄 <b>Automated Reporting:</b> Instant generation of comprehensive PDF medical reports.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.image("https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", use_column_width=True)
+        st.info("💡 **Getting Started:** Use the sidebar on the left to navigate to the **Prediction** dashboard to run a risk assessment, or visit the **AI Chatbot** for medical guidance.")
 
 elif page == "Prediction":
     st.title("Liver Disease Prediction")
@@ -221,31 +233,102 @@ elif page == "Prediction":
             )
 
 elif page == "AI Chatbot":
-    st.title("AI Medical Chatbot")
+    st.title("AI Medical Chatbot 🤖")
     st.write("Ask our specialized AI assistant about liver health, symptoms, and lifestyle changes.")
     
-    # Display chat messages from history
-    for message in st.session_state.chat_history:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    chat_col, faq_col = st.columns([2, 1])
+    
+    with faq_col:
+        st.markdown("### 💡 Frequently Asked Questions")
+        with st.container(height=650):
+            with st.expander("1. What is fatty liver?"):
+                st.write("Fatty liver disease is a condition caused by excess fat build-up in the liver. It's often linked to obesity, type 2 diabetes, and excessive alcohol consumption.")
+            with st.expander("2. What does high Bilirubin mean?"):
+                st.write("Bilirubin is a yellowish pigment. High levels can indicate liver damage, causing jaundice (yellowing of eyes and skin).")
+            with st.expander("3. What are ALT and AST?"):
+                st.write("ALT and AST are enzymes found in the liver. When liver cells are damaged or inflamed, they leak these enzymes into the bloodstream, causing levels to rise in blood tests.")
+            with st.expander("4. Can liver damage be reversed?"):
+                st.write("The liver is unique in its ability to regenerate. Early-stage damage (like fatty liver or mild inflammation) can often be reversed with diet and lifestyle changes. However, late-stage scarring (cirrhosis) is usually permanent.")
+            with st.expander("5. What causes liver cirrhosis?"):
+                st.write("Cirrhosis is severe scarring of the liver. The most common causes are chronic alcohol abuse, chronic viral hepatitis (B and C), and non-alcoholic fatty liver disease.")
+            with st.expander("6. What foods protect the liver?"):
+                st.write("A liver-friendly diet includes coffee, tea, berries, cruciferous vegetables (like broccoli), and lean proteins. Avoid fried and processed foods.")
+            with st.expander("7. What are early symptoms of liver disease?"):
+                st.write("Early symptoms are often subtle, including chronic fatigue, unexplained weight loss, mild abdominal pain, and nausea.")
+            with st.expander("8. What is Alkaline Phosphatase (ALP)?"):
+                st.write("ALP is an enzyme found in your blood that helps break down proteins. High levels can indicate liver disease, blocked bile ducts, or bone disorders.")
+            with st.expander("9. What is Albumin?"):
+                st.write("Albumin is a protein made by your liver that keeps fluid from leaking out of blood vessels. Low levels indicate poor liver function.")
+            with st.expander("10. What does the A/G ratio indicate?"):
+                st.write("The Albumin to Globulin (A/G) ratio compares the amount of albumin to globulin in your blood. A low ratio can indicate liver disease, kidney disease, or autoimmune issues.")
+            with st.expander("11. How much alcohol is safe for the liver?"):
+                st.write("There is no 'completely safe' level, but guidelines suggest limiting intake to 1 drink per day for women and 2 for men. For those with liver disease, zero alcohol is the safest.")
+            with st.expander("12. Is coffee good for the liver?"):
+                st.write("Yes! Studies show drinking coffee can protect against liver disease, reduce inflammation, and lower the risk of cirrhosis and liver cancer.")
+            with st.expander("13. Can medications cause liver damage?"):
+                st.write("Yes, many medications (including over-the-counter painkillers like Acetaminophen) can cause liver damage if taken in excessive amounts or combined with alcohol.")
+            with st.expander("14. What is Hepatitis A?"):
+                st.write("Hepatitis A is a highly contagious liver infection caused by the hepatitis A virus, usually transmitted through contaminated food or water. It does not cause chronic liver disease.")
+            with st.expander("15. What is Hepatitis B?"):
+                st.write("Hepatitis B is a viral infection transmitted through bodily fluids. It can be acute or chronic, potentially leading to cirrhosis or liver cancer. A vaccine is available.")
+            with st.expander("16. What is Hepatitis C?"):
+                st.write("Hepatitis C is a blood-borne virus that often leads to chronic liver disease. While there is no vaccine, it is highly curable with modern antiviral medications.")
+            with st.expander("17. How does obesity affect the liver?"):
+                st.write("Excess body weight causes fat to accumulate in liver cells, leading to Non-Alcoholic Fatty Liver Disease (NAFLD), which can progress to inflammation and scarring.")
+            with st.expander("18. What is a liver biopsy?"):
+                st.write("A procedure where a small needle is used to extract a tiny piece of liver tissue for microscopic examination to diagnose the severity of liver disease.")
+            with st.expander("19. Can drinking water detox the liver?"):
+                st.write("Water doesn't 'detox' the liver, but staying hydrated helps the liver function optimally to filter toxins from your blood.")
+            with st.expander("20. Are liver detox supplements safe?"):
+                st.write("Many 'detox' teas and supplements are not FDA-regulated and can actually harm the liver. Always consult a doctor before taking them.")
+            with st.expander("21. What is jaundice?"):
+                st.write("Jaundice is the yellowing of the skin and the whites of the eyes, caused by an excessive buildup of bilirubin in the blood due to liver dysfunction.")
+            with st.expander("22. Why does liver disease cause itchy skin?"):
+                st.write("Itchy skin (pruritus) in liver disease is often caused by the buildup of bile salts under the skin when the liver's bile ducts are blocked or damaged.")
+            with st.expander("23. Does smoking affect the liver?"):
+                st.write("Yes, smoking yields toxic chemicals that cause inflammation, accelerate liver scarring (fibrosis), and increase the risk of liver cancer.")
+            with st.expander("24. What is liver cancer?"):
+                st.write("The most common type of primary liver cancer mostly occurs in people with chronic liver diseases like cirrhosis or hepatitis B/C.")
+            with st.expander("25. Can diabetes lead to liver disease?"):
+                st.write("Yes, type 2 diabetes increases the risk of NAFLD, as insulin resistance promotes fat storage in the liver.")
+            with st.expander("26. What happens if the liver stops working?"):
+                st.write("Acute or chronic liver failure causes toxins to build up in the brain, internal bleeding, and fluid accumulation, requiring immediate medical care or a transplant.")
+            with st.expander("27. Is liver disease hereditary?"):
+                st.write("Some liver diseases are genetic, such as Hemochromatosis (iron buildup), Wilson's disease (copper buildup), and Alpha-1 antitrypsin deficiency.")
+            with st.expander("28. What is an enlarged liver?"):
+                st.write("Swelling of the liver beyond its normal size, often a symptom of underlying issues like fatty liver, heart failure, or infections.")
+            with st.expander("29. How often should I test my liver function?"):
+                st.write("Healthy adults usually get it checked during an annual physical. Those with risk factors (obesity, diabetes, heavy drinking) may need it more frequently.")
+            with st.expander("30. Can stress affect the liver?"):
+                st.write("Chronic psychological stress can alter blood flow to the liver and exacerbate inflammation, worsening existing liver diseases.")
+            with st.expander("31. What is the role of the liver in digestion?"):
+                st.write("The liver produces bile, which breaks down fats in the small intestine, and processes nutrients absorbed from the digestive tract.")
+            with st.expander("32. How does the liver process toxins?"):
+                st.write("It uses enzymes to break down harmful substances (like alcohol and drugs) into harmless byproducts that are excreted in bile or urine.")
             
-    # Accept user input
-    if prompt := st.chat_input("Ask a medical question (e.g., 'What are the symptoms of fatty liver?'):"):
-        # Add user message to chat history
-        st.session_state.chat_history.append({"role": "user", "content": prompt})
-        
-        # Display user message
-        with st.chat_message("user"):
-            st.markdown(prompt)
+    with chat_col:
+        # Display chat messages from history
+        for message in st.session_state.chat_history:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+                
+        # Accept user input
+        if prompt := st.chat_input("Ask a medical question (e.g., 'What are the symptoms of fatty liver?'):"):
+            # Add user message to chat history
+            st.session_state.chat_history.append({"role": "user", "content": prompt})
             
-        # Get response
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response_text = get_chatbot_response(prompt, st.session_state.chat_history)
-                st.markdown(response_text)
-        
-        # Add assistant response to chat history
-        st.session_state.chat_history.append({"role": "assistant", "content": response_text})
+            # Display user message
+            with st.chat_message("user"):
+                st.markdown(prompt)
+                
+            # Get response
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    response_text = get_chatbot_response(prompt, st.session_state.chat_history)
+                    st.markdown(response_text)
+            
+            # Add assistant response to chat history
+            st.session_state.chat_history.append({"role": "assistant", "content": response_text})
 
 elif page == "Analytics Dashboard":
     st.title("Explainable AI & Analytics Dashboard")
