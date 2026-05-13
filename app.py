@@ -26,32 +26,54 @@ st.set_page_config(
 # Custom CSS for premium design
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    html, body, [class*="css"]  {
+        font-family: 'Inter', sans-serif;
+    }
     .main {
-        background-color: #f8f9fa;
-        color: #212529;
+        background-color: #f0f4f8;
     }
     .stButton>button {
-        background-color: #0d6efd;
+        background-color: #2563eb;
         color: white;
         border-radius: 8px;
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1.2rem;
         font-weight: 600;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     }
     .stButton>button:hover {
-        background-color: #0b5ed7;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background-color: #1d4ed8;
+        box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        transform: translateY(-2px);
     }
     .card {
         background-color: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        margin-bottom: 24px;
+        border: 1px solid #e2e8f0;
+    }
+    .metric-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-left: 4px solid #2563eb;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     h1, h2, h3 {
-        color: #0d6efd;
+        color: #1e293b;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
+    .highlight-blue {
+        color: #2563eb;
+    }
+    hr {
+        margin: 2rem 0;
+        border-color: #e2e8f0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -162,31 +184,51 @@ if page == "Home":
         st.info("💡 **Getting Started:** Use the sidebar on the left to navigate to the **Prediction** dashboard to run a risk assessment, or visit the **AI Chatbot** for medical guidance.")
 
 elif page == "Prediction":
-    st.title("Liver Disease Prediction")
-    st.write("Enter patient vitals to assess the risk of liver disease.")
+    st.markdown("""
+        <div>
+            <h1 style="margin-bottom: 0;">Liver Disease Prediction <span class="highlight-blue">Engine</span> ⚙️</h1>
+            <p style="color: #64748b; font-size: 1.1rem;">Enter the patient's biochemical markers and vitals below to generate an AI-driven risk assessment.</p>
+        </div>
+        <hr>
+    """, unsafe_allow_html=True)
     
     model, scaler = get_or_train_models()
     if not model or not scaler:
         st.error("⚠️ Failed to train or load the model. Please check the dataset and logs.")
     else:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown("### 📋 Patient Clinical Vitals")
         with st.form("prediction_form"):
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             
             with col1:
-                age = st.number_input("Age", min_value=1, max_value=120, value=40)
-                gender = st.selectbox("Gender", ["Male", "Female"])
-                tot_bilirubin = st.number_input("Total Bilirubin", min_value=0.0, max_value=50.0, value=0.9, format="%.2f")
-                dir_bilirubin = st.number_input("Direct Bilirubin", min_value=0.0, max_value=20.0, value=0.2, format="%.2f")
-                alk_phos = st.number_input("Alkaline Phosphotase", min_value=0, max_value=2500, value=190)
+                st.markdown("**Demographics**")
+                age = st.number_input("Age (Years)", min_value=1, max_value=120, value=40)
+                gender = st.selectbox("Biological Gender", ["Male", "Female"])
                 
             with col2:
-                alamine = st.number_input("Alamine Aminotransferase", min_value=0, max_value=2000, value=25)
-                aspartate = st.number_input("Aspartate Aminotransferase", min_value=0, max_value=3000, value=25)
-                tot_proteins = st.number_input("Total Proteins", min_value=0.0, max_value=15.0, value=6.8, format="%.1f")
-                albumin = st.number_input("Albumin", min_value=0.0, max_value=10.0, value=3.3, format="%.1f")
-                ag_ratio = st.number_input("A/G Ratio", min_value=0.0, max_value=5.0, value=0.9, format="%.2f")
+                st.markdown("**Bilirubin Levels (mg/dL)**")
+                tot_bilirubin = st.number_input("Total Bilirubin", min_value=0.0, max_value=50.0, value=0.9, format="%.2f")
+                dir_bilirubin = st.number_input("Direct Bilirubin", min_value=0.0, max_value=20.0, value=0.2, format="%.2f")
                 
-            submit_button = st.form_submit_button(label="Predict Risk")
+            with col3:
+                st.markdown("**Liver Enzymes (IU/L)**")
+                alk_phos = st.number_input("Alkaline Phosphatase (ALP)", min_value=0, max_value=2500, value=190)
+                alamine = st.number_input("Alanine Aminotransferase (ALT)", min_value=0, max_value=2000, value=25)
+                aspartate = st.number_input("Aspartate Aminotransferase (AST)", min_value=0, max_value=3000, value=25)
+
+            st.markdown("<br>**Proteins (g/dL)**", unsafe_allow_html=True)
+            col4, col5, col6 = st.columns(3)
+            with col4:
+                tot_proteins = st.number_input("Total Proteins", min_value=0.0, max_value=15.0, value=6.8, format="%.1f")
+            with col5:
+                albumin = st.number_input("Albumin", min_value=0.0, max_value=10.0, value=3.3, format="%.1f")
+            with col6:
+                ag_ratio = st.number_input("Albumin/Globulin Ratio", min_value=0.0, max_value=5.0, value=0.9, format="%.2f")
+                
+            st.markdown("<br>", unsafe_allow_html=True)
+            submit_button = st.form_submit_button(label="Analyze Patient Risk 🚀")
+        st.markdown("</div>", unsafe_allow_html=True)
             
         if submit_button:
             input_data = {
@@ -196,45 +238,59 @@ elif page == "Prediction":
                 'Total_Protiens': tot_proteins, 'Albumin': albumin, 'Albumin_and_Globulin_Ratio': ag_ratio
             }
             
-            with st.spinner('Analyzing...'):
+            with st.spinner('Analyzing biomarker profile...'):
                 result = predict_liver_disease(input_data, model, scaler)
                 st.session_state.prediction_result = result
                 st.session_state.patient_data = input_data
                 
         if st.session_state.prediction_result:
-            st.markdown("---")
             res = st.session_state.prediction_result
             
-            st.subheader("Prediction Results")
+            st.markdown("### 📊 Diagnostic Results")
             
-            col1, col2, col3 = st.columns(3)
-            
+            # Styling results
             if res['is_high_risk']:
-                col1.error(f"**{res['prediction']}**")
+                st.markdown(f"""
+                <div style="background-color: #fef2f2; border-left: 6px solid #ef4444; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h2 style="color: #b91c1c; margin: 0;">Critical Finding: {res['prediction']}</h2>
+                    <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: #991b1b;">Immediate clinical attention and lifestyle modifications are highly recommended.</p>
+                </div>
+                """, unsafe_allow_html=True)
             else:
-                col1.success(f"**{res['prediction']}**")
+                st.markdown(f"""
+                <div style="background-color: #f0fdf4; border-left: 6px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h2 style="color: #15803d; margin: 0;">Favorable Finding: {res['prediction']}</h2>
+                    <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: #166534;">Patient markers do not indicate severe hepatic distress at this time.</p>
+                </div>
+                """, unsafe_allow_html=True)
                 
-            col2.metric("Risk Probability", f"{res['risk_percentage']}%")
-            col3.metric("Model Confidence", f"{res['confidence_score']}%")
+            mcol1, mcol2, mcol3 = st.columns(3)
+            mcol1.metric("Risk Probability", f"{res['risk_percentage']}%", delta="High Risk" if res['is_high_risk'] else "Low Risk", delta_color="inverse")
+            mcol2.metric("Model Confidence", f"{res['confidence_score']}%", delta="Reliable")
             
-            st.subheader("Health Recommendations")
+            st.markdown("### 📝 Clinical Recommendations")
             recs = generate_recommendations(res['is_high_risk'])
             for r in recs:
-                st.write(f"- {r}")
+                st.markdown(f"<div class='metric-card' style='margin-bottom: 10px;'>✔️ {r}</div>", unsafe_allow_html=True)
                 
             # PDF Generation
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
             pdf_bytes = create_pdf_report(st.session_state.patient_data, res, recs)
             st.download_button(
-                label="📄 Download Full PDF Report",
+                label="📄 Download Full PDF Medical Report",
                 data=pdf_bytes,
-                file_name=f"LiverCare_Report_{datetime.now().strftime('%Y%m%d')}.pdf",
+                file_name=f"LiverCare_Clinical_Report_{datetime.now().strftime('%Y%m%d')}.pdf",
                 mime="application/pdf"
             )
 
 elif page == "AI Chatbot":
-    st.title("AI Medical Chatbot 🤖")
-    st.write("Ask our specialized AI assistant about liver health, symptoms, and lifestyle changes.")
+    st.markdown("""
+        <div>
+            <h1 style="margin-bottom: 0;">Virtual AI <span class="highlight-blue">Hepatologist</span> 💬</h1>
+            <p style="color: #64748b; font-size: 1.1rem;">Ask our specialized AI assistant about liver health, symptoms, dietary plans, and lifestyle modifications.</p>
+        </div>
+        <hr>
+    """, unsafe_allow_html=True)
     
     chat_col, faq_col = st.columns([2, 1])
     
@@ -331,7 +387,13 @@ elif page == "AI Chatbot":
             st.session_state.chat_history.append({"role": "assistant", "content": response_text})
 
 elif page == "Analytics Dashboard":
-    st.title("Explainable AI & Analytics Dashboard")
+    st.markdown("""
+        <div>
+            <h1 style="margin-bottom: 0;">Analytics & <span class="highlight-blue">Explainable AI</span> 📈</h1>
+            <p style="color: #64748b; font-size: 1.1rem;">Deep dive into the dataset distributions and understand how the AI model makes clinical decisions.</p>
+        </div>
+        <hr>
+    """, unsafe_allow_html=True)
     
     # Load dataset for EDA
     try:
