@@ -79,8 +79,13 @@ page = st.sidebar.radio("Go to", ["Home", "Prediction", "AI Chatbot", "Analytics
 def get_or_train_models():
     model, scaler = load_models()
     if not model or not scaler:
-        train_and_evaluate()
-        model, scaler = load_models()
+        try:
+            train_and_evaluate()
+            model, scaler = load_models()
+        except Exception as e:
+            import streamlit as st
+            st.error(f"Could not train the model. Are you sure 'dataset/indian_liver_patient.csv' is uploaded to your repository? Error: {e}")
+            return None, None
     return model, scaler
 
 def create_pdf_report(patient_data, result, recommendations):
@@ -287,10 +292,18 @@ elif page == "Analytics Dashboard":
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(background)
             
+            # Handle different SHAP versions (list vs 3D array)
+            if isinstance(shap_values, list):
+                sv = shap_values[1]
+            elif len(np.shape(shap_values)) == 3:
+                sv = shap_values[:, :, 1]
+            else:
+                sv = shap_values
+            
             # SHAP Summary Plot
             fig_shap, ax = plt.subplots(figsize=(10, 6))
             # SHAP values for class 1 (Disease)
-            shap.summary_plot(shap_values[1], background, show=False)
+            shap.summary_plot(sv, background, show=False)
             st.pyplot(fig_shap)
             
             st.info("💡 **How to read this chart:** Features at the top are most important. Red dots indicate high feature values, and blue dots indicate low feature values. If the dots are on the right side of the center line, they increase the risk of liver disease.")
