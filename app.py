@@ -26,54 +26,90 @@ st.set_page_config(
 # Custom CSS for premium design
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+    
     html, body, [class*="css"]  {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Outfit', sans-serif !important;
     }
-    .main {
-        background-color: #f0f4f8;
+    
+    /* Modern Background */
+    .stApp {
+        background-image: 
+            radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.06), transparent 25%),
+            radial-gradient(circle at 85% 30%, rgba(37, 99, 235, 0.06), transparent 25%);
+        background-attachment: fixed;
     }
+    
+    /* Glassmorphism Cards adapting to theme */
+    .card {
+        background-color: var(--secondary-background-color);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(128, 128, 128, 0.15);
+        margin-bottom: 24px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Metric Cards */
+    .metric-card {
+        background-color: var(--secondary-background-color);
+        border-left: 4px solid #2563eb;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+        color: var(--text-color);
+        border: 1px solid rgba(128, 128, 128, 0.1);
+    }
+    .metric-card:hover {
+        transform: translateX(5px);
+    }
+
+    /* Premium Buttons */
     .stButton>button {
-        background-color: #2563eb;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
         color: white;
-        border-radius: 8px;
+        border-radius: 12px;
         border: none;
-        padding: 0.6rem 1.2rem;
+        padding: 0.6rem 1.5rem;
         font-weight: 600;
+        letter-spacing: 0.5px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
     }
     .stButton>button:hover {
-        background-color: #1d4ed8;
-        box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
         transform: translateY(-2px);
+        color: white;
     }
-    .card {
-        background-color: white;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        margin-bottom: 24px;
-        border: 1px solid #e2e8f0;
+    
+    /* Typography */
+    h1, h2, h3, h4, h5 {
+        font-weight: 700 !important;
+        letter-spacing: -0.02em !important;
+        color: var(--text-color) !important;
     }
-    .metric-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-left: 4px solid #2563eb;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    h1, h2, h3 {
-        color: #1e293b;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
+    
     .highlight-blue {
-        color: #2563eb;
+        background: -webkit-linear-gradient(45deg, #2563eb, #60a5fa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
     }
+    
     hr {
         margin: 2rem 0;
-        border-color: #e2e8f0;
+        border-color: rgba(128, 128, 128, 0.2);
+    }
+    
+    /* Remove default Streamlit padding at the top */
+    .block-container {
+        padding-top: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -155,26 +191,26 @@ def create_pdf_report(patient_data, result, recommendations):
 if page == "Home":
     st.title("Welcome to LiverCare AI 🩺")
     st.markdown("""
-    <h3 style="color: #6c757d; font-weight: 400;">Advanced Clinical Decision Support System for Hepatic Health</h3>
+    <h3 style="opacity: 0.7; font-weight: 400; margin-top: -15px;">Advanced Clinical Decision Support System for Hepatic Health</h3>
     <hr>
     """, unsafe_allow_html=True)
     
     col1, col2 = st.columns([1.5, 1])
     with col1:
         st.markdown("""
-        <div class="card" style="padding: 2rem;">
-            <h4 style="color: #0d6efd; margin-top: 0;">Empowering Early Detection</h4>
-            <p style="font-size: 1.1rem; line-height: 1.6;">
+        <div class="card" style="padding: 2.5rem;">
+            <h4 style="color: #2563eb !important; margin-top: 0; font-size: 1.5rem;">Empowering Early Detection</h4>
+            <p style="font-size: 1.1rem; line-height: 1.7; opacity: 0.9;">
             LiverCare AI is a state-of-the-art diagnostic assistant designed to bridge the gap between artificial intelligence and clinical hepatology. 
             By analyzing complex biochemical markers, our platform provides instant, highly accurate risk assessments for liver disorders.
             </p>
-            <hr>
-            <h5>Core Capabilities:</h5>
-            <ul style="font-size: 1.05rem; line-height: 1.8;">
-                <li>🔬 <b>Predictive Analytics:</b> High-accuracy risk stratification using Random Forest algorithms.</li>
-                <li>🧠 <b>Explainable AI (SHAP):</b> Transparent decision-making visualizing clinical feature importance.</li>
-                <li>💬 <b>Virtual AI Assistant:</b> Rule-based conversational agent for instant clinical guidance.</li>
-                <li>📄 <b>Automated Reporting:</b> Instant generation of comprehensive PDF medical reports.</li>
+            <hr style="margin: 1.5rem 0;">
+            <h5 style="margin-bottom: 1rem;">Core Capabilities:</h5>
+            <ul style="font-size: 1.05rem; line-height: 2.0; opacity: 0.9; list-style-type: none; padding-left: 0;">
+                <li><span style="font-size: 1.2rem; margin-right: 10px;">🔬</span> <b>Predictive Analytics:</b> High-accuracy risk stratification using Random Forest algorithms.</li>
+                <li><span style="font-size: 1.2rem; margin-right: 10px;">🧠</span> <b>Explainable AI (SHAP):</b> Transparent decision-making visualizing clinical feature importance.</li>
+                <li><span style="font-size: 1.2rem; margin-right: 10px;">💬</span> <b>Virtual AI Assistant:</b> Rule-based conversational agent for instant clinical guidance.</li>
+                <li><span style="font-size: 1.2rem; margin-right: 10px;">📄</span> <b>Automated Reporting:</b> Instant generation of comprehensive PDF medical reports.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -186,8 +222,8 @@ if page == "Home":
 elif page == "Prediction":
     st.markdown("""
         <div>
-            <h1 style="margin-bottom: 0;">Liver Disease Prediction <span class="highlight-blue">Engine</span> ⚙️</h1>
-            <p style="color: #64748b; font-size: 1.1rem;">Enter the patient's biochemical markers and vitals below to generate an AI-driven risk assessment.</p>
+            <h1 style="margin-bottom: 0.5rem; font-size: 2.5rem;">Liver Disease Prediction <span class="highlight-blue">Engine</span> ⚙️</h1>
+            <p style="opacity: 0.7; font-size: 1.15rem;">Enter the patient's biochemical markers and vitals below to generate an AI-driven risk assessment.</p>
         </div>
         <hr>
     """, unsafe_allow_html=True)
@@ -251,16 +287,16 @@ elif page == "Prediction":
             # Styling results
             if res['is_high_risk']:
                 st.markdown(f"""
-                <div style="background-color: #fef2f2; border-left: 6px solid #ef4444; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                    <h2 style="color: #b91c1c; margin: 0;">Critical Finding: {res['prediction']}</h2>
-                    <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: #991b1b;">Immediate clinical attention and lifestyle modifications are highly recommended.</p>
+                <div style="background-color: rgba(239, 68, 68, 0.1); border-left: 6px solid #ef4444; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); backdrop-filter: blur(5px);">
+                    <h2 style="color: #ef4444 !important; margin: 0 0 10px 0; display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 10px;">⚠️</span> Critical Finding: {res['prediction']}</h2>
+                    <p style="margin: 0; font-size: 1.15rem; opacity: 0.9;">Immediate clinical attention and lifestyle modifications are highly recommended.</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
-                <div style="background-color: #f0fdf4; border-left: 6px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                    <h2 style="color: #15803d; margin: 0;">Favorable Finding: {res['prediction']}</h2>
-                    <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: #166534;">Patient markers do not indicate severe hepatic distress at this time.</p>
+                <div style="background-color: rgba(34, 197, 94, 0.1); border-left: 6px solid #22c55e; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); backdrop-filter: blur(5px);">
+                    <h2 style="color: #22c55e !important; margin: 0 0 10px 0; display: flex; align-items: center;"><span style="font-size: 1.5em; margin-right: 10px;">✅</span> Favorable Finding: {res['prediction']}</h2>
+                    <p style="margin: 0; font-size: 1.15rem; opacity: 0.9;">Patient markers do not indicate severe hepatic distress at this time.</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
@@ -286,8 +322,8 @@ elif page == "Prediction":
 elif page == "AI Chatbot":
     st.markdown("""
         <div>
-            <h1 style="margin-bottom: 0;">Virtual AI <span class="highlight-blue">Hepatologist</span> 💬</h1>
-            <p style="color: #64748b; font-size: 1.1rem;">Ask our specialized AI assistant about liver health, symptoms, dietary plans, and lifestyle modifications.</p>
+            <h1 style="margin-bottom: 0.5rem; font-size: 2.5rem;">Virtual AI <span class="highlight-blue">Hepatologist</span> 💬</h1>
+            <p style="opacity: 0.7; font-size: 1.15rem;">Ask our specialized AI assistant about liver health, symptoms, dietary plans, and lifestyle modifications.</p>
         </div>
         <hr>
     """, unsafe_allow_html=True)
@@ -389,8 +425,8 @@ elif page == "AI Chatbot":
 elif page == "Analytics Dashboard":
     st.markdown("""
         <div>
-            <h1 style="margin-bottom: 0;">Analytics & <span class="highlight-blue">Explainable AI</span> 📈</h1>
-            <p style="color: #64748b; font-size: 1.1rem;">Deep dive into the dataset distributions and understand how the AI model makes clinical decisions.</p>
+            <h1 style="margin-bottom: 0.5rem; font-size: 2.5rem;">Analytics & <span class="highlight-blue">Explainable AI</span> 📈</h1>
+            <p style="opacity: 0.7; font-size: 1.15rem;">Deep dive into the dataset distributions and understand how the AI model makes clinical decisions.</p>
         </div>
         <hr>
     """, unsafe_allow_html=True)
