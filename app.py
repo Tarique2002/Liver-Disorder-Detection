@@ -1394,24 +1394,9 @@ elif "AI Assistant" in page:
             else:
                 for message in st.session_state.chat_history:
                     if message["role"] == "user":
-                        st.markdown(f"""
-                        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
-                            <div class="chat-bubble chat-bubble-user">
-                                {message["content"]}
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f'<div style="display: flex; justify-content: flex-end; margin-bottom: 16px;"><div class="chat-bubble chat-bubble-user">{message["content"]}</div></div>', unsafe_allow_html=True)
                     else:
-                        st.markdown(f"""
-                        <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px;">
-                            <div class="avatar-ring">
-                                <img src="data:image/png;base64,{sphere_base64}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                            </div>
-                            <div class="chat-bubble chat-bubble-assistant">
-                                {message["content"]}
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown(f'<div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px;"><div class="avatar-ring"><img src="data:image/png;base64,{sphere_base64}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"></div><div class="chat-bubble chat-bubble-assistant">{message["content"]}</div></div>', unsafe_allow_html=True)
                         
         if prompt := st.chat_input("Enter clinical question (e.g. 'Symptoms of liver disease?')..."):
             st.session_state.chat_history.append({"role": "user", "content": prompt})
@@ -1435,19 +1420,7 @@ elif "AI Assistant" in page:
             
             with chat_container:
                 thinking_placeholder = st.empty()
-                thinking_placeholder.markdown(f"""
-                <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px;">
-                    <div class="avatar-ring">
-                        <img src="data:image/png;base64,{sphere_base64}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; animation: heartbeat 1.5s infinite;">
-                    </div>
-                    <div class="chat-bubble chat-bubble-assistant" style="display: flex; align-items: center; gap: 6px; padding: 12px 18px;">
-                        <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-blue); border-radius: 50%; animation: pulse-ring 1s infinite alternate;"></span>
-                        <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-cyan); border-radius: 50%; animation: pulse-ring 1.2s infinite alternate; animation-delay: 0.2s;"></span>
-                        <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-indigo); border-radius: 50%; animation: pulse-ring 1.4s infinite alternate; animation-delay: 0.4s;"></span>
-                        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-left: 6px;">AI is parsing query...</span>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+                thinking_placeholder.markdown(f'<div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px;"><div class="avatar-ring"><img src="data:image/png;base64,{sphere_base64}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; animation: heartbeat 1.5s infinite;"></div><div class="chat-bubble chat-bubble-assistant" style="display: flex; align-items: center; gap: 6px; padding: 12px 18px;"><span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-blue); border-radius: 50%; animation: pulse-ring 1s infinite alternate;"></span><span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-cyan); border-radius: 50%; animation: pulse-ring 1.2s infinite alternate; animation-delay: 0.2s;"></span><span style="display: inline-block; width: 6px; height: 6px; background-color: var(--primary-indigo); border-radius: 50%; animation: pulse-ring 1.4s infinite alternate; animation-delay: 0.4s;"></span><span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-left: 6px;">AI is parsing query...</span></div></div>', unsafe_allow_html=True)
                 
                 response_data = get_chatbot_response(user_prompt, st.session_state.chat_history, system_context)
                 
