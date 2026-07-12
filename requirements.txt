@@ -9,3 +9,4 @@ plotly
 shap
 google-generativeai
 fpdf
+pypdf
