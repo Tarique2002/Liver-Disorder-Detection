@@ -49,6 +49,10 @@ class LocalLLMConnector:
         return None
 
     @classmethod
+    def is_available(cls):
+        return cls.get_active_endpoint() is not None
+
+    @classmethod
     def get_ollama_model(cls):
         try:
             r = requests.get("http://localhost:11434/api/tags", timeout=0.3)
@@ -135,9 +139,8 @@ def get_chatbot_response(user_input, chat_history=None, system_context=None):
     recent_history = chat_history[-10:] if (chat_history and len(chat_history) > 10) else (chat_history or [])
     
     # Try querying the active local LLM generator
-    generator = LocalLLMConnector.stream_query(recent_history, system_prompt)
-    if generator is not None:
-        return generator
+    if LocalLLMConnector.is_available():
+        return LocalLLMConnector.stream_query(recent_history, system_prompt)
         
     # Fallback to local rule-based database matching
     user_input_clean = user_input.lower()

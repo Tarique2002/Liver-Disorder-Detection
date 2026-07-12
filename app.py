@@ -1440,7 +1440,22 @@ elif "AI Assistant" in page:
                         text_placeholder.markdown(response_data)
                         response_text = response_data
                     else:
-                        response_text = text_placeholder.write_stream(response_data)
+                        try:
+                            response_text = text_placeholder.write_stream(response_data)
+                        except Exception as e:
+                            from chatbot import MEDICAL_KNOWLEDGE_DB
+                            import re
+                            user_input_clean = user_prompt.lower()
+                            found_responses = []
+                            for keyword, response in MEDICAL_KNOWLEDGE_DB.items():
+                                if re.search(r'\b' + re.escape(keyword) + r'\b', user_input_clean):
+                                    found_responses.append(response)
+                            if found_responses:
+                                fallback_text = "\n\n".join(found_responses[:2]) + f"\n\n*[Local LLM timed out or encountered error: {e}. Gracefully fell back to rule-based diagnostics database]*"
+                            else:
+                                fallback_text = f"I encountered an error connecting to your local LLM ({e}). Please verify Ollama is active."
+                            text_placeholder.markdown(fallback_text)
+                            response_text = fallback_text
                         
             st.session_state.chat_history.append({"role": "assistant", "content": response_text})
             st.rerun()
