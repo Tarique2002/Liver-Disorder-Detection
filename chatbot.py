@@ -151,6 +151,10 @@ def get_chatbot_response(user_input, chat_history=None, system_context=None):
             found_responses.append(response)
             
     if found_responses:
+        # If it's a simple greeting, don't append the fallback offline warning
+        is_greeting = len(found_responses) == 1 and any(g in user_input_clean for g in ["hello", "hi", "hey"])
+        if is_greeting:
+            return found_responses[0]
         return "\n\n".join(found_responses[:2]) + "\n\n*[Local LLM connection offline. Responding from rule-based clinical database core]*"
     else:
         return (
